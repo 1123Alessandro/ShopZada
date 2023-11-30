@@ -1,12 +1,12 @@
 import pandas as pd
 from datetime import date
 
-df_order1 = pd.read_parquet('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Operations Department/order_data_20200101-20200701.parquet')
-df_order2 = pd.read_pickle('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Operations Department/order_data_20200701-20211001.pickle')
-df_order3 = pd.read_csv('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Operations Department/order_data_20211001-20220101.csv')
-df_order4 = pd.read_excel('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Operations Department/order_data_20220101-20221201.xlsx')
-df_order5 = pd.read_json('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Operations Department/order_data_20221201-20230601.json')
-df_order6 = pd.read_html('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Operations Department/order_data_20230601-20240101.html')
+df_order1 = pd.read_parquet('./Project Dataset/Operations Department/order_data_20200101-20200701.parquet')
+df_order2 = pd.read_pickle('./Project Dataset/Operations Department/order_data_20200701-20211001.pickle')
+df_order3 = pd.read_csv('./Project Dataset/Operations Department/order_data_20211001-20220101.csv')
+df_order4 = pd.read_excel('./Project Dataset/Operations Department/order_data_20220101-20221201.xlsx')
+df_order5 = pd.read_json('./Project Dataset/Operations Department/order_data_20221201-20230601.json')
+df_order6 = pd.read_html('./Project Dataset/Operations Department/order_data_20230601-20240101.html')
 
 #Removing useless Unnamed: 0 column
 df_order3 = df_order3.drop('Unnamed: 0', axis=1)
@@ -27,4 +27,4 @@ df_orders['estimated_arrival'] = df_orders['estimated_arrival'].astype(int)
 today = str(date.today())
 df_orders = df_orders[df_orders['transaction_date'] <= today]
 
-df_orders.to_parquet('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/exports/clean_order_data.parquet')
+df_orders.to_parquet('./exports/clean_order_data.parquet')

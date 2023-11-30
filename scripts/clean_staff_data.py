@@ -1,6 +1,6 @@
 import pandas as pd
 
-df_staff_data = pd.read_html('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Enterprise Department/staff_data.html')
+df_staff_data = pd.read_html('./Project Dataset/Enterprise Department/staff_data.html')
 
 #Remove Unnamed: 0 column
 df_staff_data = df_staff_data.drop('Unnamed: 0', axis=1)
@@ -19,4 +19,4 @@ df_staff_data['street'] = df_staff_data['street'].str.title()
 df_staff_data['state'] = df_staff_data['state'].str.title()
 df_staff_data['city'] = df_staff_data['city'].str.title()
 
-df_staff_data.to_parquet('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/exports/clean_staff_data.parquet')
+df_staff_data.to_parquet('./exports/clean_staff_data.parquet')

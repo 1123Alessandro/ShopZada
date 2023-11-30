@@ -1,0 +1,13 @@
+py ./scripts/clean_campaign_data.py
+py ./scripts/clean_line_item_data_prices.py
+py ./scripts/clean_line_item_data_products.py
+py ./scripts/clean_merchant_data.py
+py ./scripts/clean_order_data.py
+py ./scripts/clean_order_delays.py
+py ./scripts/clean_order_with_merchant_data.py
+py ./scripts/clean_product_list.py
+py ./scripts/clean_staff_data.py
+py ./scripts/clean_transactional_campaign_data.py
+py ./scripts/clean_user_credit_card.py
+py ./scripts/clean_user_data.py
+py ./scripts/clean_user_job.py
