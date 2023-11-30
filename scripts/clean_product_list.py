@@ -18,4 +18,4 @@ pt = pl.product_type
 pt = pt.mask(~pt.isna(), pt[~pt.isna()].apply(conform))
 pl.product_type = pt
 
-pl.to_parquet('./exports/clean_product_list.py')
+pl.to_parquet('./exports/clean_product_list.parquet')
