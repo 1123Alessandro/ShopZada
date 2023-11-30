@@ -10,4 +10,4 @@ df_order3 = df_order3.drop(columns=['Unnamed: 0'])
 #Combine all order files
 df_orders = pd.concat([df_order1, df_order2, df_order3], ignore_index=True)
 
-df_order3.to_parquet('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/exports/clean_order_with_merchant_data.parquet')
+df_orders.to_parquet('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/exports/clean_order_with_merchant_data.parquet')
