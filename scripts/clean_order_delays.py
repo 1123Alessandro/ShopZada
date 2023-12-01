@@ -1,6 +1,6 @@
 import pandas as pd
 
-df_delays = pd.read_html('./Project Dataset/Operations Department/order_delays.html')
+df_delays = pd.read_html('./Project Dataset/Operations Department/order_delays.html')[0]
 
 #Removing useless Unnamed: 0 column
 df_delays = df_delays.drop('Unnamed: 0', axis=1)

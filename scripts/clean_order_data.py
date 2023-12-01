@@ -6,7 +6,7 @@ df_order2 = pd.read_pickle('./Project Dataset/Operations Department/order_data_2
 df_order3 = pd.read_csv('./Project Dataset/Operations Department/order_data_20211001-20220101.csv')
 df_order4 = pd.read_excel('./Project Dataset/Operations Department/order_data_20220101-20221201.xlsx')
 df_order5 = pd.read_json('./Project Dataset/Operations Department/order_data_20221201-20230601.json')
-df_order6 = pd.read_html('./Project Dataset/Operations Department/order_data_20230601-20240101.html')
+df_order6 = pd.read_html('./Project Dataset/Operations Department/order_data_20230601-20240101.html')[0]
 
 #Removing useless Unnamed: 0 column
 df_order3 = df_order3.drop('Unnamed: 0', axis=1)

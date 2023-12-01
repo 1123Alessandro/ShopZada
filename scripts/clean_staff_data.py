@@ -1,6 +1,6 @@
 import pandas as pd
 
-df_staff_data = pd.read_html('./Project Dataset/Enterprise Department/staff_data.html')
+df_staff_data = pd.read_html('./Project Dataset/Enterprise Department/staff_data.html')[0]
 
 #Remove Unnamed: 0 column
 df_staff_data = df_staff_data.drop('Unnamed: 0', axis=1)

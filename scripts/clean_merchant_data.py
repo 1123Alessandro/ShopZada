@@ -1,6 +1,6 @@
 import pandas as pd
 
-df_merchant_data = pd.read_html('./Project Dataset/Enterprise Department/merchant_data.html')
+df_merchant_data = pd.read_html('./Project Dataset/Enterprise Department/merchant_data.html')[0]
 
 #Remove Unnamed: 0 column
 df_merchant_data = df_merchant_data.drop('Unnamed: 0', axis=1)
