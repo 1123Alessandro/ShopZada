@@ -5,4 +5,5 @@ n = pd.DataFrame([x for x in range(100)])
 
 dir = os.environ.get('AIRFLOW_HOME')
 
-n.to_parquet(f'{dir}/exports/TESTINGGGG.parquet')
+print(dir)
+# n.to_parquet(f'{dir}/exports/TESTINGGGG.parquet')

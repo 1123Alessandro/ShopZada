@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-ud = pd.read_json('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/Project Dataset/Customer Management Department/user_data.json')
+ud = pd.read_json(f'{dir}/Project Dataset/Customer Management Department/user_data.json')
 
 # parse to datetime
 ud.creation_date = pd.to_datetime(ud.creation_date)
@@ -29,4 +31,4 @@ ud.birthdate = pd.to_datetime(ud.birthdate)
 # drop duplicates
 ud = ud.drop_duplicates(['user_id'])
 
-ud.to_parquet('/mnt/c/Users/araza/Documents/1/git repos/ShopZada/exports/clean_user_data.parquet')
+ud.to_parquet(f'{dir}/exports/clean_user_data.parquet')
