@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-df_merchant_data = pd.read_html('./Project Dataset/Enterprise Department/merchant_data.html')[0]
+df_merchant_data = pd.read_html(f'{dir}/Project Dataset/Enterprise Department/merchant_data.html')[0]
 
 #Remove Unnamed: 0 column
 df_merchant_data = df_merchant_data.drop('Unnamed: 0', axis=1)
@@ -17,4 +19,4 @@ df_merchant_data['street'] = df_merchant_data['street'].str.title()
 df_merchant_data['state'] = df_merchant_data['state'].str.title()
 df_merchant_data['city'] = df_merchant_data['city'].str.title()
 
-df_merchant_data.to_parquet('./exports/clean_merchant_data.parquet')
+df_merchant_data.to_parquet(f'{dir}/exports/clean_merchant_data.parquet')

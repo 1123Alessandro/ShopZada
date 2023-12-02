@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-df_staff_data = pd.read_html('./Project Dataset/Enterprise Department/staff_data.html')[0]
+df_staff_data = pd.read_html(f'{dir}/Project Dataset/Enterprise Department/staff_data.html')[0]
 
 #Remove Unnamed: 0 column
 df_staff_data = df_staff_data.drop('Unnamed: 0', axis=1)
@@ -19,4 +21,4 @@ df_staff_data['street'] = df_staff_data['street'].str.title()
 df_staff_data['state'] = df_staff_data['state'].str.title()
 df_staff_data['city'] = df_staff_data['city'].str.title()
 
-df_staff_data.to_parquet('./exports/clean_staff_data.parquet')
+df_staff_data.to_parquet(f'{dir}/exports/clean_staff_data.parquet')

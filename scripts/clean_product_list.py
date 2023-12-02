@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-pl = pd.read_excel('./Project Dataset/Business Department/product_list.xlsx')
+pl = pd.read_excel(f'{dir}/Project Dataset/Business Department/product_list.xlsx')
 
 # drop unnamed column
 pl = pl.drop(columns=['Unnamed: 0'])
@@ -18,4 +20,4 @@ pt = pl.product_type
 pt = pt.mask(~pt.isna(), pt[~pt.isna()].apply(conform))
 pl.product_type = pt
 
-pl.to_parquet('./exports/clean_product_list.parquet')
+pl.to_parquet(f'{dir}/exports/clean_product_list.py')
