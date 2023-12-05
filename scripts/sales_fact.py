@@ -18,7 +18,7 @@ sales_fact = pd.merge(a[['order_id', 'user_id', 'transaction_date']], order_dime
 sales_fact = sales_fact.merge(customer_dimension.CUSTOMER_ID, left_on='user_id', right_on='CUSTOMER_ID')
 
 # merge with DATE dimension
-sales_fact = sales_fact.merge(date_dimension.ORDER_DATE_ID, left_on='transaction_date', right_on='ORDER_DATE_ID').drop(columns=['order_id', 'user_id', 'transaction_date'])
+sales_fact = sales_fact.merge(date_dimension.DATE_ID, left_on='transaction_date', right_on='DATE_ID').drop(columns=['order_id', 'user_id', 'transaction_date'])
 
 # merge with line_item_data_products and drop extra order_id column
 sales_fact = sales_fact.merge(line_item_data_products[['order_id', 'product_id']], left_on='ORDER_ID', right_on='order_id').drop(columns=['order_id'])
