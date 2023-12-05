@@ -134,6 +134,18 @@ f3 = BashOperator (
 	dag=dag,
 )
 
+in1 = BashOperator(
+    task_id = 'ingest_dimensions',
+    bash_command = 'python3 "${AIRFLOW_HOME}/scripts/blabla.py"',
+    dag=dag,
+)
+
+in2 = BashOperator(
+    task_id = 'ingest_fact_tables',
+    bash_command = 'echo TODO: edit later',
+    dag=dag,
+)
+
 d1 << c1
 
 d2 << c11
@@ -174,3 +186,6 @@ f3 << d3
 f3 << d6
 f3 << d4
 f3 << c6
+
+[d1, d2, d3, d4, d5, d6, d7] >> in1
+[f1, f2, f3] >> in2
