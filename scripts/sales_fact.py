@@ -3,6 +3,7 @@ import pandas as pd
 a = pd.read_parquet('./exports/clean_order_data.parquet')
 line_item_data_products = pd.read_parquet('./exports/clean_line_item_data_products.parquet')
 order_with_merchant = pd.read_parquet('./exports/clean_order_with_merchant_data.parquet')
+order_delays = pd.read_parquet('./exports/clean_order_delays.parquet')
 order_dimension = pd.read_parquet('./exports/order_dimension.parquet')
 customer_dimension = pd.read_parquet('./exports/customer_dimension.parquet')
 date_dimension = pd.read_parquet('./exports/date_dimension.parquet')
@@ -32,8 +33,22 @@ sales_fact = sales_fact.merge(order_with_merchant[['order_id', 'merchant_id']], 
 # merge with MERCHANT dimension
 sales_fact = sales_fact.merge(merchant_dimension.MERCHANT_ID, left_on='merchant_id', right_on='MERCHANT_ID').drop(columns=['merchant_id'])
 
+# adding the TOTAL_AMOUNT
+sales_fact = sales_fact.merge(order_dimension[['ORDER_ID', 'ORDER_QUANTITY']], on='ORDER_ID')
+sales_fact = sales_fact.merge(product_dimension[['PRODUCT_ID', 'PRODUCT_PRICE']], on='PRODUCT_ID')
+
+def getTotal(x):
+    return x.ORDER_QUANTITY * x.PRODUCT_PRICE
+
+sales_fact = sales_fact.assign(TOTAL_AMOUNT=sales_fact.apply(getTotal, axis=1))
+sales_fact = sales_fact.drop(columns=['ORDER_QUANTITY', 'PRODUCT_PRICE'])
+
+# adding the DELAY_IN_DAYS
+sales_fact = sales_fact.merge(order_delays, how='left', left_on='ORDER_ID', right_on='order_id')
+sales_fact = sales_fact.drop(columns=['order_id'])
+sales_fact = sales_fact.rename(columns={'delay in days': 'DELAY_IN_DAYS'})
+
 # create index column and rename as SALES_FACT_ID
 sales_fact = sales_fact.reset_index().rename(columns={'index': 'SALES_FACT_ID'})
 
 sales_fact.to_parquet('./exports/sales_fact.parquet')
-
