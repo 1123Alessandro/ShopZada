@@ -14,18 +14,6 @@ dag = DAG(
     catchup = False,
 )
 
-t1 = BashOperator (
-    task_id = 'testing',
-    bash_command = 'python3 "${AIRFLOW_HOME}/scripts/test.py"',
-    dag=dag,
-)
-
-t2 = BashOperator (
-    task_id = 'halo',
-    bash_command = 'echo "Hello world"',
-    dag=dag,
-)
-
 c1 = BashOperator (
 	task_id = "clean_campaign_data",
 	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/clean_campaign_data.py"',
@@ -92,4 +80,96 @@ c13 = BashOperator (
 	dag=dag,
 )
 
-[c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13] >> t2
+d1 = BashOperator (
+	task_id = "transform_campaign_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_campaign_dimension.py"',
+	dag=dag,
+)
+d2 = BashOperator (
+	task_id = "transform_customer_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_customer_dimension.py"',
+	dag=dag,
+)
+d3 = BashOperator (
+	task_id = "transform_date_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_date_dimension.py"',
+	dag=dag,
+)
+d4 = BashOperator (
+	task_id = "transform_merchant_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_merchant_dimension.py"',
+	dag=dag,
+)
+d5 = BashOperator (
+	task_id = "transform_order_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_order_dimension.py"',
+	dag=dag,
+)
+d6 = BashOperator (
+	task_id = "transform_product_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_product_dimension.py"',
+	dag=dag,
+)
+d7 = BashOperator (
+	task_id = "transform_staff_dimension",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/transform_staff_dimension.py"',
+	dag=dag,
+)
+
+f1 = BashOperator (
+	task_id = "campaign_transaction_fact",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/campaign_transaction_fact.py"',
+	dag=dag,
+)
+
+f2 = BashOperator (
+	task_id = "merchant_perfomance_fact",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/merchant_perfomance_fact.py"',
+	dag=dag,
+)
+
+f3 = BashOperator (
+	task_id = "sales_fact",
+	bash_command = 'python3 "${AIRFLOW_HOME}/scripts/sales_fact.py"',
+	dag=dag,
+)
+
+d1 << c1
+
+d2 << c11
+d2 << c12
+d2 << c13
+
+d3 << c10
+d3 << c5
+
+d4 << c4
+
+d5 << c5
+d5 << c2
+
+d6 << c8
+
+d7 << c9
+
+f1 << c10
+f1 << c5
+f1 << d1
+f1 << d5
+f1 << d3
+
+f2 << c7
+f2 << c5
+f2 << d4
+f2 << d5
+f2 << d7
+f2 << d3
+
+f3 << c5
+f3 << c3
+f3 << c7
+f3 << d5
+f3 << d2
+f3 << d3
+f3 << d6
+f3 << d4
