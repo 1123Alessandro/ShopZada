@@ -18,7 +18,7 @@ ab = ab.assign(MONTH=ab.transaction_date.dt.month)
 ab = ab.assign(YEAR=ab.transaction_date.dt.year)
 
 # rename column/s
-ab = ab.rename(columns={'transaction_date': 'ORDER_DATE_ID'})
+ab = ab.rename(columns={'transaction_date': 'DATE_ID'})
 
 # export
 ab.to_parquet('./exports/date_dimension.parquet')
