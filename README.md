@@ -17,7 +17,7 @@ export AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://shopzada:pass@l
 airflow db migrate
 ```
 - Create your own admin accounts using the airflow CLI
-- Create postgresql database for airflow metadata with `psql -a -f setupDB.sql`
+- Create postgresql database for airflow metadata and the main database with `psql -a -f setupDB.sql`
 - run `airflow scheduler -D` to daemonize the scheduler
 - run `airflow webserver -D -p 8080` to daemonize the webserver
 - access <localhost:8080> and log in with your account
