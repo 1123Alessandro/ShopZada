@@ -1,8 +1,5 @@
 import pandas as pd
 
-a = pd.read_parquet('./exports/clean_transactional_campaign_data.parquet')
-import pandas as pd
-
 a = pd.read_parquet('./exports/clean_transactional_campaign_data.parquet')[['campaign_id', 'order_id']]
 order_data = pd.read_parquet('./exports/clean_order_data.parquet')
 campaign_dimension = pd.read_parquet('./exports/campaign_dimension.parquet')
@@ -20,10 +17,9 @@ campaign_transaction_fact = campaign_transaction_fact.merge(order_dimension.ORDE
 
 # merge DATE dimension
 campaign_transaction_fact.transaction_date = pd.to_datetime(campaign_transaction_fact.transaction_date)
-campaign_transaction_fact = campaign_transaction_fact.merge(date_dimension.ORDER_DATE_ID, left_on='transaction_date', right_on='ORDER_DATE_ID')
+campaign_transaction_fact = campaign_transaction_fact.merge(date_dimension.DATE_ID, left_on='transaction_date', right_on='DATE_ID')
 
 # drop extra columns
->>>>>>> campaign-transaction-fact
 campaign_transaction_fact = campaign_transaction_fact.drop(columns=['campaign_id', 'order_id', 'transaction_date'])
 
 # create CAMPAIGN_TRANSACTION_FACT_ID

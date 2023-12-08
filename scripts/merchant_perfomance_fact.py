@@ -22,7 +22,7 @@ merchant_performance_fact = merchant_performance_fact.merge(staff_dimension.STAF
 
 # merge DATE dimension
 merchant_performance_fact.transaction_date = pd.to_datetime(merchant_performance_fact.transaction_date)
-merchant_performance_fact = merchant_performance_fact.merge(date_dimension.ORDER_DATE_ID, left_on='transaction_date', right_on='ORDER_DATE_ID')
+merchant_performance_fact = merchant_performance_fact.merge(date_dimension.DATE_ID, left_on='transaction_date', right_on='DATE_ID')
 
 # drop extra columns
 merchant_performance_fact = merchant_performance_fact.drop(columns=['merchant_id', 'order_id', 'staff_id', 'transaction_date'])
