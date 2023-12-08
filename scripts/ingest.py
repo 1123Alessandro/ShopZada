@@ -1,11 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 import psycopg2
-engine = create_engine('postgresql+psycopg2://postgres:pass@localhost/shopzada')
-
-# test = pd.read_parquet('./exports/sales_fact.parquet')
-#
-# test.to_sql('Test', engine, if_exists='replace', index=False)
+engine = create_engine('postgresql+psycopg2://shopzada:pass@localhost/shopzada')
 
 # ingest dimensions
 pd.read_parquet('./exports/order_dimension.parquet').to_sql('order', engine, if_exists='replace', index=False)
