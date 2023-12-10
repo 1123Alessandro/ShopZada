@@ -1,4 +1,4 @@
-CREATE VIEW campaign_sales AS
+CREATE VIEW base_campaign_sales AS
 SELECT 
 	"campaign transaction"."CAMPAIGN_ID",
     c."CAMPAIGN_NAME",
@@ -17,11 +17,11 @@ inner join campaign c
 
 -------------------------------------------------------------------------------------------
 
-create view association_analysis as
+create view total_campaign_sales as
 select
     "CAMPAIGN_NAME", "PRODUCT_TYPE", round(sum("TOTAL_AMOUNT")::numeric, 2) as total
 from
-    campaign_sales
+    base_campaign_sales
 group by
     "CAMPAIGN_NAME", "PRODUCT_TYPE"
 order by
