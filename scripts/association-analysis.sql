@@ -1,6 +1,7 @@
 CREATE VIEW campaign_sales AS
 SELECT 
 	"campaign transaction"."CAMPAIGN_ID",
+    c."CAMPAIGN_NAME",
     "campaign transaction"."ORDER_ID",
     sales."PRODUCT_ID",
     sales."TOTAL_AMOUNT",
@@ -10,16 +11,18 @@ FROM
 INNER JOIN sales
 	ON "campaign transaction"."ORDER_ID" = sales."ORDER_ID"
 INNER JOIN product
-    ON sales."PRODUCT_ID" = product."PRODUCT_ID";
+    ON sales."PRODUCT_ID" = product."PRODUCT_ID"
+inner join campaign c
+    on "campaign transaction"."CAMPAIGN_ID" = c."CAMPAIGN_ID";
 
 -------------------------------------------------------------------------------------------
 
 create view association_analysis as
 select
-    "CAMPAIGN_ID", "PRODUCT_TYPE", round(sum("TOTAL_AMOUNT")::numeric, 2) as total
+    "CAMPAIGN_NAME", "PRODUCT_TYPE", round(sum("TOTAL_AMOUNT")::numeric, 2) as total
 from
     campaign_sales
 group by
-    "CAMPAIGN_ID", "PRODUCT_TYPE"
+    "CAMPAIGN_NAME", "PRODUCT_TYPE"
 order by
     total desc;
