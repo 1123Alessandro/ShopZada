@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, BigInteger, TIMESTAMP, DATE, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, BigInteger, TIMESTAMP, DATE, ForeignKey, text
 from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,7 +10,7 @@ dir = os.environ.get('AIRFLOW_HOME')
 #create database first before running
 
 #Adjust user, password, etc. according to own implementation
-engine = create_engine('postgresql://postgres:postgres@localhost:5432/ShopZada')
+# engine = create_engine('postgresql://shopzada:pass@localhost:5432/shopzada')
 
 Base = declarative_base()
 
@@ -110,18 +110,43 @@ class sales(Base):
     DELAY_IN_DAYS = Column(Integer)
 
 # Create the tables
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
-# ingest dimensions
-pd.read_parquet(f'{dir}/exports/order_dimension.parquet').to_sql('order', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/staff_dimension.parquet').to_sql('staff', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/product_dimension.parquet').to_sql('product', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/campaign_dimension.parquet').to_sql('campaign', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/customer_dimension.parquet').to_sql('customer', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/merchant_dimension.parquet').to_sql('merchant', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/date_dimension.parquet').to_sql('date', engine, if_exists='replace', index=False)
+def ingest():
+    engine = create_engine('postgresql://shopzada:pass@localhost:5432/shopzada')
+    Base.metadata.create_all(engine)
+    # ingest dimensions
+    pd.read_parquet(f'{dir}/exports/order_dimension.parquet').to_sql('order', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/staff_dimension.parquet').to_sql('staff', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/product_dimension.parquet').to_sql('product', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/campaign_dimension.parquet').to_sql('campaign', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/customer_dimension.parquet').to_sql('customer', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/merchant_dimension.parquet').to_sql('merchant', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/date_dimension.parquet').to_sql('date', engine, if_exists='append', index=False)
 
-# ingest facts
-pd.read_parquet(f'{dir}/exports/sales_fact.parquet').to_sql('sales', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/campaign_transaction_fact.parquet').to_sql('campaign transaction', engine, if_exists='replace', index=False)
-pd.read_parquet(f'{dir}/exports/merchant_performance_fact.parquet').to_sql('merchant performance', engine, if_exists='replace', index=False)
+    # ingest facts
+    pd.read_parquet(f'{dir}/exports/sales_fact.parquet').to_sql('sales', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/campaign_transaction_fact.parquet').to_sql('campaign transaction', engine, if_exists='append', index=False)
+    pd.read_parquet(f'{dir}/exports/merchant_performance_fact.parquet').to_sql('merchant performance', engine, if_exists='append', index=False)
+
+def reset():
+    engine = create_engine('postgresql://shopzada:pass@localhost:5432/shopzada')
+    with engine.begin() as conn:
+        conn.execute(text('DROP TABLE "order" CASCADE'))
+        conn.execute(text('DROP TABLE "staff" CASCADE'))
+        conn.execute(text('DROP TABLE "product" CASCADE'))
+        conn.execute(text('DROP TABLE "campaign" CASCADE'))
+        conn.execute(text('DROP TABLE "customer" CASCADE'))
+        conn.execute(text('DROP TABLE "merchant" CASCADE'))
+        conn.execute(text('DROP TABLE "date" CASCADE'))
+        conn.execute(text('DROP TABLE "campaign transaction" CASCADE'))
+        conn.execute(text('DROP TABLE "sales" CASCADE'))
+        conn.execute(text('DROP TABLE "merchant performance" CASCADE'))
+
+try: 
+    ingest()
+except:
+    print('Dropping tables to reset database . . . ')
+    reset()
+    print('Reingesting Database . . . ')
+    ingest()
