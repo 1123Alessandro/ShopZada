@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, BigInteger, TIMESTAMP, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, BigInteger, TIMESTAMP, DATE, ForeignKey
 from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -40,7 +40,7 @@ class customer(Base):
 
 class date(Base):
     __tablename__ = 'date'
-    DATE_ID = Column(TIMESTAMP(timezone=False), primary_key=True)
+    DATE_ID = Column(DATE, primary_key=True)
     DAY_OF_WEEK = Column(Integer)
     MONTH = Column(Integer)
     YEAR = Column(Integer)
@@ -73,7 +73,7 @@ class staff(Base):
     __tablename__ = 'staff'
     STAFF_ID = Column(String, primary_key=True)
     STAFF_NAME = Column(String)
-    STAFF_JOBLEVEL = Column(String)
+    STAFF_JOB_LEVEL = Column(String)
     STAFF_STREET = Column(String)
     STAFF_STATE = Column(String)
     STAFF_CITY = Column(String)
@@ -84,51 +84,26 @@ class staff(Base):
 class campaign_transaction(Base):
     __tablename__ = 'campaign transaction'
     CAMPAIGN_TRANSACTION_FACT_ID = Column(BigInteger, primary_key=True)
-    
     CAMPAIGN_ID = Column(String, ForeignKey('campaign.CAMPAIGN_ID'))
-    campaign = relationship('campaign', back_populates='campaign transaction')
-
     ORDER_ID = Column(String, ForeignKey('order.ORDER_ID'))
-    order = relationship('order', back_populates='campaign transaction')
-
-    DATE_ID = Column(TIMESTAMP(timezone=False), ForeignKey('date.DATE_ID'))
-    order = relationship('date', back_populates='campaign transaction')
+    DATE_ID = Column(DATE, ForeignKey('date.DATE_ID'))
 
 class merchant_transaction(Base):
     __tablename__ = 'merchant performance'
     MERCHANT_PERFORMANCE_FACT_ID = Column(BigInteger, primary_key=True)
-    
     MERCHANT_ID = Column(String, ForeignKey('merchant.MERCHANT_ID'))
-    merchant = relationship('merchant', back_populates='merchant performance')
-    
     ORDER_ID = Column(String, ForeignKey('order.ORDER_ID'))
-    order = relationship('order', back_populates='merchant performance')
-
     STAFF_ID = Column(String, ForeignKey('staff.STAFF_ID'))
-    staff = relationship('staff', back_populates='merchant performance')
-
-    DATE_ID = Column(TIMESTAMP(timezone=False), ForeignKey('date.DATE_ID'))
-    date = relationship('date', back_populates='merchant performance')
+    DATE_ID = Column(DATE, ForeignKey('date.DATE_ID'))
 
 class sales(Base):
     __tablename__ = 'sales'
     SALES_FACT_ID = Column(BigInteger, primary_key=True)
-
     ORDER_ID = Column(String, ForeignKey('order.ORDER_ID'))
-    order = relationship('order', back_populates='sales')
-
     CUSTOMER_ID = Column(String, ForeignKey('customer.CUSTOMER_ID'))
-    customer = relationship('customer', back_populates='sales')
-
-    DATE_ID = Column(TIMESTAMP(timezone=False), ForeignKey('date.DATE_ID'))
-    date = relationship('date', back_populates='sales')
-    
+    DATE_ID = Column(DATE, ForeignKey('date.DATE_ID'))
     PRODUCT_ID = Column(String, ForeignKey('product.PRODUCT_ID'))
-    product = relationship('product', back_populates='sales')
-    
     MERCHANT_ID = Column(String, ForeignKey('merchant.MERCHANT_ID'))
-    merchant = relationship('merchant', back_populates='sales')
-    
     TOTAL_AMOUNT = Column(DOUBLE_PRECISION)
     DELAY_IN_DAYS = Column(Integer)
 
