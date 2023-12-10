@@ -8,7 +8,7 @@ import psycopg2
 #create database first before running
 
 #Adjust user, password, etc. according to own implementation
-engine = create_engine('postgresql://postgres:kyle1018@localhost:5432/ShopZada')
+engine = create_engine('postgresql://postgres:postgres@localhost:5432/ShopZada')
 
 Base = declarative_base()
 
