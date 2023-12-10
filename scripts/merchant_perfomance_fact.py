@@ -1,12 +1,14 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-a = pd.read_parquet('./exports/clean_order_with_merchant_data.parquet')[['merchant_id', 'order_id', 'staff_id']]
-order_data = pd.read_parquet('./exports/clean_order_data.parquet')[['order_id', 'transaction_date']]
+a = pd.read_parquet(f'{dir}/exports/clean_order_with_merchant_data.parquet')[['merchant_id', 'order_id', 'staff_id']]
+order_data = pd.read_parquet(f'{dir}/exports/clean_order_data.parquet')[['order_id', 'transaction_date']]
 
-merchant_dimension = pd.read_parquet('./exports/merchant_dimension.parquet')
-order_dimension = pd.read_parquet('./exports/order_dimension.parquet')
-staff_dimension = pd.read_parquet('./exports/staff_dimension.parquet')
-date_dimension = pd.read_parquet('./exports/date_dimension.parquet')
+merchant_dimension = pd.read_parquet(f'{dir}/exports/merchant_dimension.parquet')
+order_dimension = pd.read_parquet(f'{dir}/exports/order_dimension.parquet')
+staff_dimension = pd.read_parquet(f'{dir}/exports/staff_dimension.parquet')
+date_dimension = pd.read_parquet(f'{dir}/exports/date_dimension.parquet')
 
 # merge order_data transaction_date
 merchant_performance_fact = a.merge(order_data, on='order_id')
@@ -30,4 +32,4 @@ merchant_performance_fact = merchant_performance_fact.drop(columns=['merchant_id
 # create MERCHANT_PERFORMANCE_FACT_ID
 merchant_performance_fact = merchant_performance_fact.reset_index().rename(columns={'index': 'MERCHANT_PERFORMANCE_FACT_ID'})
 
-merchant_performance_fact.to_parquet('./exports/merchant_performance_fact.parquet')
+merchant_performance_fact.to_parquet(f'{dir}/exports/merchant_performance_fact.parquet')

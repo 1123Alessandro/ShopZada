@@ -1,14 +1,16 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-a = pd.read_parquet('./exports/clean_order_data.parquet')
-line_item_data_products = pd.read_parquet('./exports/clean_line_item_data_products.parquet')
-order_with_merchant = pd.read_parquet('./exports/clean_order_with_merchant_data.parquet')
-order_delays = pd.read_parquet('./exports/clean_order_delays.parquet')
-order_dimension = pd.read_parquet('./exports/order_dimension.parquet')
-customer_dimension = pd.read_parquet('./exports/customer_dimension.parquet')
-date_dimension = pd.read_parquet('./exports/date_dimension.parquet')
-product_dimension = pd.read_parquet('./exports/product_dimension.parquet')
-merchant_dimension = pd.read_parquet('./exports/merchant_dimension.parquet')
+a = pd.read_parquet(f'{dir}/exports/clean_order_data.parquet')
+line_item_data_products = pd.read_parquet(f'{dir}/exports/clean_line_item_data_products.parquet')
+order_with_merchant = pd.read_parquet(f'{dir}/exports/clean_order_with_merchant_data.parquet')
+order_delays = pd.read_parquet(f'{dir}/exports/clean_order_delays.parquet')
+order_dimension = pd.read_parquet(f'{dir}/exports/order_dimension.parquet')
+customer_dimension = pd.read_parquet(f'{dir}/exports/customer_dimension.parquet')
+date_dimension = pd.read_parquet(f'{dir}/exports/date_dimension.parquet')
+product_dimension = pd.read_parquet(f'{dir}/exports/product_dimension.parquet')
+merchant_dimension = pd.read_parquet(f'{dir}/exports/merchant_dimension.parquet')
 
 a.transaction_date = pd.to_datetime(a.transaction_date)
 
@@ -51,4 +53,4 @@ sales_fact = sales_fact.rename(columns={'delay in days': 'DELAY_IN_DAYS'})
 # create index column and rename as SALES_FACT_ID
 sales_fact = sales_fact.reset_index().rename(columns={'index': 'SALES_FACT_ID'})
 
-sales_fact.to_parquet('./exports/sales_fact.parquet')
+sales_fact.to_parquet(f'{dir}/exports/sales_fact.parquet')

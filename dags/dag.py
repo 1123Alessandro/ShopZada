@@ -10,7 +10,7 @@ dag = DAG(
         'retry_delay': timedelta(seconds=30),
     },
     start_date = datetime(2023, 12, 1),
-    schedule = timedelta(minutes=1),
+    schedule = timedelta(minutes=90),
     catchup = False,
 )
 

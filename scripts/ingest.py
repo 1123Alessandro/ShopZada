@@ -4,6 +4,8 @@ from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
 #create database first before running
 
@@ -110,17 +112,16 @@ class sales(Base):
 # Create the tables
 Base.metadata.create_all(engine)
 
-
 # ingest dimensions
-pd.read_parquet('./exports/order_dimension.parquet').to_sql('order', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/staff_dimension.parquet').to_sql('staff', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/product_dimension.parquet').to_sql('product', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/campaign_dimension.parquet').to_sql('campaign', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/customer_dimension.parquet').to_sql('customer', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/merchant_dimension.parquet').to_sql('merchant', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/date_dimension.parquet').to_sql('date', engine, index=False, if_exists='append')
+pd.read_parquet(f'{dir}/exports/order_dimension.parquet').to_sql('order', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/staff_dimension.parquet').to_sql('staff', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/product_dimension.parquet').to_sql('product', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/campaign_dimension.parquet').to_sql('campaign', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/customer_dimension.parquet').to_sql('customer', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/merchant_dimension.parquet').to_sql('merchant', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/date_dimension.parquet').to_sql('date', engine, if_exists='replace', index=False)
 
 # ingest facts
-pd.read_parquet('./exports/sales_fact.parquet').to_sql('sales', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/campaign_transaction_fact.parquet').to_sql('campaign transaction', engine, index=False, if_exists='append')
-pd.read_parquet('./exports/merchant_performance_fact.parquet').to_sql('merchant performance', engine, index=False, if_exists='append')
+pd.read_parquet(f'{dir}/exports/sales_fact.parquet').to_sql('sales', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/campaign_transaction_fact.parquet').to_sql('campaign transaction', engine, if_exists='replace', index=False)
+pd.read_parquet(f'{dir}/exports/merchant_performance_fact.parquet').to_sql('merchant performance', engine, if_exists='replace', index=False)
