@@ -1,1 +1,3 @@
-select * from campaign;
+create table meeseeks (
+    id INT PRIMARY KEY
+);

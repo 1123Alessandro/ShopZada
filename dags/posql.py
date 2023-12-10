@@ -24,6 +24,6 @@ s1 = PostgresOperator(
     dag=dag
 )
 
-s2 = PostgresOperator()
+# s2 = PostgresOperator()
 
 s1

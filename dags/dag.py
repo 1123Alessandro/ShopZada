@@ -1,6 +1,9 @@
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
 dag = DAG(
     'ShopZada',
@@ -10,7 +13,7 @@ dag = DAG(
         'retry_delay': timedelta(seconds=30),
     },
     start_date = datetime(2023, 12, 1),
-    schedule = timedelta(minutes=1),
+    schedule = timedelta(minutes=90),
     catchup = False,
 )
 
@@ -135,9 +138,58 @@ f3 = BashOperator (
 )
 
 in1 = BashOperator(
-    task_id = 'ingest_dimensions',
+    task_id = 'ingest',
     bash_command = 'python3 "${AIRFLOW_HOME}/scripts/ingest.py"',
     dag=dag,
+)
+
+s1 = PostgresOperator(
+    task_id = 'association_analysis',
+    postgres_conn_id = 'shopzada',
+    sql = '/association-analysis.sql',
+    dag=dag
+)
+
+s2 = PostgresOperator(
+    task_id = 'customer_profiling',
+    postgres_conn_id = 'shopzada',
+    sql = '/customer_profiling.sql',
+    dag=dag
+)
+
+s3 = PostgresOperator(
+    task_id = 'customer_segmentation',
+    postgres_conn_id = 'shopzada',
+    sql = '/customer_segmentation.sql',
+    dag=dag
+)
+
+s4 = PostgresOperator(
+    task_id = 'merchant_performance',
+    postgres_conn_id = 'shopzada',
+    sql = '/merchant-performance.sql',
+    dag=dag
+)
+
+s5 = PostgresOperator(
+    task_id = 'successful_campaigns',
+    postgres_conn_id = 'shopzada',
+    sql = '/successful_campaigns.sql',
+    dag=dag
+)
+
+s6 = PostgresOperator(
+    task_id = 'preferred_banks',
+    postgres_conn_id = 'shopzada',
+    sql = '/preferred_banks.sql',
+    dag=dag
+)
+
+s7 = PostgresOperator(
+    task_id = 'products_top_performers',
+    postgres_conn_id = 'shopzada',
+    sql = '/products_top_performers.sql',
+    dag=dag
 )
 
 d1 << c1
@@ -182,3 +234,5 @@ f3 << d4
 f3 << c6
 
 [d1, d2, d3, d4, d5, d6, d7, f1, f2, f3] >> in1
+
+in1 >> [s1, s2, s3, s4, s5, s6, s7]
