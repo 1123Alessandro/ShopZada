@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW preffered_banks_customers AS
+CREATE OR REPLACE VIEW preferred_banks_customers AS
 
 SELECT "CUSTOMER_CREDIT_CARD_BANK", COUNT(*) AS "COUNT" 
 FROM customer 
@@ -7,7 +7,7 @@ ORDER BY "COUNT" DESC;
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE VIEW preffered_banks_sales AS
+CREATE OR REPLACE VIEW preferred_banks_sales AS
   
 SELECT "CUSTOMER_CREDIT_CARD_BANK", COUNT(*) AS "COUNT" 
 FROM customer 
