@@ -10,7 +10,7 @@ inner join sales sa
 group by
     m."MERCHANT_ID", m."STAFF_ID"
 order by
-    total_sales desc
+    total_sales desc;
 
 -------------------------------------------------------------------------------------------
 
