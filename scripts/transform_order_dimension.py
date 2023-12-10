@@ -1,7 +1,9 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-clean_order_data = pd.read_parquet("./exports/clean_order_data.parquet")
-line_item_data_prices = pd.read_parquet('./exports/clean_line_item_data_prices.parquet')
+clean_order_data = pd.read_parquet(f"{dir}/exports/clean_order_data.parquet")
+line_item_data_prices = pd.read_parquet(f'{dir}/exports/clean_line_item_data_prices.parquet')
 
 order_dimension = clean_order_data
 
@@ -14,4 +16,4 @@ order_dimension = order_dimension.merge(line_item_data_prices[['order_id', 'quan
 #Renaming Columns
 order_dimension = order_dimension.rename(columns={'order_id': 'ORDER_ID', 'estimated_arrival': 'ORDER_ESTIMATED_ARRIVAL', 'quantity': 'ORDER_QUANTITY'})
 
-order_dimension.to_parquet('./exports/order_dimension.parquet')
+order_dimension.to_parquet(f'{dir}/exports/order_dimension.parquet')

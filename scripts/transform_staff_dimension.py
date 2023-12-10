@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-clean_staff_data = pd.read_parquet("./exports/clean_staff_data.parquet")
+clean_staff_data = pd.read_parquet(f"{dir}/exports/clean_staff_data.parquet")
 
 staff_dimension = clean_staff_data
 
@@ -8,4 +10,4 @@ staff_dimension = clean_staff_data
 staff_dimension = staff_dimension.rename(columns={'staff_id': 'STAFF_ID', 'name': 'STAFF_NAME', 'job_level': 'STAFF_JOB LEVEL', 'street': 'STAFF_STREET', 'state': 'STAFF_STATE', 
                                                   'city': 'STAFF_CITY', 'country': 'STAFF_COUNTRY', 'contact_number': 'STAFF_CONTACT_NUMBER', 'creation_date': 'STAFF_CREATION_DATE'})
 
-staff_dimension.to_parquet('./exports/staff_dimension.parquet')
+staff_dimension.to_parquet(f'{dir}/exports/staff_dimension.parquet')

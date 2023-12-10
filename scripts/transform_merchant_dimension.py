@@ -1,6 +1,8 @@
 import pandas as pd
+import os
+dir = os.environ.get('AIRFLOW_HOME')
 
-clean_merchant_data = pd.read_parquet('./exports/clean_merchant_data.parquet')
+clean_merchant_data = pd.read_parquet(f'{dir}/exports/clean_merchant_data.parquet')
 
 merchant_dimension = clean_merchant_data
 
@@ -9,4 +11,4 @@ merchant_dimension = merchant_dimension.rename(columns={'merchant_id': 'MERCHANT
                                                         'contact_number': 'MERCHANT_CONTACT_NUMBER', 'street': 'MERCHANT_STREET', 'state': 'MERCHANT_STATE', 'city': 'MERCHANT_CITY', 
                                                         'country': 'MERCHANT_COUNTRY'})
 
-merchant_dimension.to_parquet('./exports/merchant_dimension.parquet')
+merchant_dimension.to_parquet(f'{dir}/exports/merchant_dimension.parquet')
